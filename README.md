@@ -89,6 +89,26 @@ curl -X POST http://localhost:8000/api/chat \
 -d '{"message": "캡슐화가 뭐야?"}'
 ```
 
+### AI 복습 주기 계산
+
+망각 곡선 이론에 기반하여 AI가 계산한 최적의 다음 복습 주기를 반환합니다.
+
+- **URL:** `/api/review/calculate-interval`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "is_correct": true,
+    "current_interval": 5
+  }
+  ```
+- **Response Body:**
+  ```json
+  {
+    "next_interval": 10
+  }
+  ```
+
 ## 프로젝트 구조
 
 ```

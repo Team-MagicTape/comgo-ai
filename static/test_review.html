@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AI 복습 주기 계산 테스트</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding: 2em; background-color: #f8f9fa; color: #212529; }
+        .container { max-width: 500px; margin: auto; background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; }
+        .form-group { margin-bottom: 1.5em; }
+        label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+        input[type="number"] { width: calc(100% - 20px); padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1em; }
+        .radio-group label { font-weight: normal; }
+        button { width: 100%; padding: 12px 15px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 1.1em; }
+        button:hover { background-color: #0056b3; }
+        #result { margin-top: 1.5em; padding: 1.5em; background-color: #e9ecef; border: 1px solid #dee2e6; border-radius: 4px; text-align: center; font-size: 1.2em; }
+        #result strong { font-size: 1.5em; color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 복습 주기 계산 테스트</h1>
+        <div class="form-group">
+            <label for="current_interval">현재 복습 주기 (일):</label>
+            <input type="number" id="current_interval" value="0" min="0">
+        </div>
+        <div class="form-group radio-group">
+            <label>직전 학습 결과:</label>
+            <input type="radio" id="correct" name="is_correct" value="true" checked>
+            <label for="correct">정답 (Correct)</label>
+            <input type="radio" id="incorrect" name="is_correct" value="false" style="margin-left: 20px;">
+            <label for="incorrect">오답 (Incorrect)</label>
+        </div>
+        <button id="calculate_btn">다음 복습 주기 계산하기</button>
+        <div id="result">
+            <p>결과가 여기에 표시됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        const calculateBtn = document.getElementById('calculate_btn');
+        const resultDiv = document.getElementById('result');
+
+        calculateBtn.addEventListener('click', async () => {
+            const currentInterval = parseInt(document.getElementById('current_interval').value, 10);
+            const isCorrect = document.querySelector('input[name="is_correct"]:checked').value === 'true';
+
+            resultDiv.innerHTML = '<p>계산 중...</p>';
+
+            try {
+                const response = await fetch('/api/review/calculate-interval', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        is_correct: isCorrect,
+                        current_interval: currentInterval
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                resultDiv.innerHTML = `<p>계산된 다음 복습 주기: <strong>${data.next_interval}일</strong></p>`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">오류가 발생했습니다: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
