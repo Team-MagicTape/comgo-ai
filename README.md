@@ -67,6 +67,28 @@ sh run.sh
 
 서버가 시작되면, 웹 브라우저에서 `http://localhost:8000` 주소로 접속하여 챗봇을 사용할 수 있습니다.
 
+## API 사용법 (SSE 스트리밍)
+
+앱 등 다른 클라이언트에서 사용하기 위한 스트리밍 API 엔드포인트입니다.
+
+- **URL:** `/api/chat`
+- **Method:** `POST`
+- **Request Body:**
+  ```json
+  {
+    "message": "사용자 질문"
+  }
+  ```
+- **Response:** Server-Sent Events (SSE) 스트림
+
+**`curl` 예시:**
+
+```bash
+curl -X POST http://localhost:8000/api/chat \
+-H "Content-Type: application/json" \
+-d '{"message": "캡슐화가 뭐야?"}'
+```
+
 ## 프로젝트 구조
 
 ```
