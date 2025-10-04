@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sse-starlette
+langchain
+langchain-openai
+python-dotenv
+langchain-community
+faiss-cpu
+beautifulsoup4
