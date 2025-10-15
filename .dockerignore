@@ -16,3 +16,4 @@ venv
 .idea
 *.md
 .DS_Store
+!README.md

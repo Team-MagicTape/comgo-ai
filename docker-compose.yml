@@ -1,0 +1,10 @@
+services:
+  comgo-ai:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./faiss_index:/app/faiss_index
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
